@@ -1,39 +1,54 @@
+import plugin.test.*
+
+import grails.test.mixin.integration.Integration
+import spock.lang.*
+
 /**
- * Cases for several actions attached to different transitions from
- * same state with different when conditions attached.
- * 
- */
-class FsmMultipleActionsTests extends GroovyTestCase {
-    static transactional = false
-    void testFirstAction() {
-        def foo= new FsmMultipleActions()
-        foo.hasErrors = false
-        assert !foo.action1Called
-        assert !foo.action2Called
-        assert foo.status =='loaded'        
+* Cases for several actions attached to different transitions from
+* same state with different when conditions attached.
+*
+*/
+@Integration
+class FsmMultipleActionsTests extends Specification {
 
-        foo.fire_status('validate')
-        assert foo.status == 'validated'
-        assert !foo.action1Called
-        assert foo.action2Called
+  def "test first action"() {
 
-    }
+    setup:
+    def foo = new FsmMultipleActions()
 
-    void testSecondAction() {
-    	def foo = new FsmMultipleActions()
-    	foo.hasErrors = true
-    	assert !foo.action1Called
-    	assert !foo.action2Called
-    	assert foo.status == 'loaded'
+    when:
+    foo.hasErrors = false
 
-    	foo.fire_status('validate')
-    	assert foo.status == 'in_error'
-    	assert foo.action1Called
-    	assert !foo.action2Called
-    		
-    }
+    then:
+    !foo.action1Called
+    !foo.action2Called
+    foo.status =='loaded'
 
-    void testAnyFromTransition() {
-    	
-    }
+    when:
+    foo.fire_status('validate')
+
+    then:
+    foo.status == 'validated'
+    !foo.action1Called
+    foo.action2Called
+
+  }
+
+  void testSecondAction() {
+    def foo = new FsmMultipleActions()
+    foo.hasErrors = true
+    assert !foo.action1Called
+    assert !foo.action2Called
+    assert foo.status == 'loaded'
+
+    foo.fire_status('validate')
+    assert foo.status == 'in_error'
+    assert foo.action1Called
+    assert !foo.action2Called
+
+  }
+
+  void testAnyFromTransition() {
+
+  }
 }

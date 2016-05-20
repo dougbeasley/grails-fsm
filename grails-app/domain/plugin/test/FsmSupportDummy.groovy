@@ -1,3 +1,6 @@
+package plugin.test
+
+
 /**
  * Domain class to held some test of the FsmSupport
  *

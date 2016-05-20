@@ -1,3 +1,4 @@
+import plugin.test.*
 import grails.plugin.fsm.*
 import grails.test.mixin.Mock
 import org.junit.After
@@ -29,7 +30,7 @@ class FsmSupportUnitTests {
         try {
             samp1.fire('nonflow', 'launch')
         } catch (Exception e) {
-            assert e.message == "Can't fire on flow 'nonflow' which is not defined in 'class FsmSupportDummy'"
+            assert e.message == "Can't fire on flow 'nonflow' which is not defined in 'class plugin.test.FsmSupportDummy'"
         }
         try {
             samp1.fire('mood', 'nonevent')
@@ -113,4 +114,3 @@ class FsmSupportUnitTests {
         }
     }
 }
-

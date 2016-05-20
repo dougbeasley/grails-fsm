@@ -1,3 +1,6 @@
+package plugin.test
+
+
 class Foo {
 
     def status

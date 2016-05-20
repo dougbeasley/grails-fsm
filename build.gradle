@@ -63,11 +63,7 @@ task wrapper(type: Wrapper) {
 
 jar {
     exclude "error.gsp"
-    // ,
-    //           "FsmSupportDummy.groovy",
-    //           "FsmMultipleActions.groovy",
-    //           "Foo.groovy",
-    //           "Foo2.groovy"]
+    exclude "plugin/test/**"
 }
 
 grailsPublish {

@@ -27,13 +27,7 @@ class GrailsFsmGrailsPlugin extends Plugin {
     def loadAfter = ['controllers', 'hibernate', 'domainclass']
 
     // resources that are excluded from plugin packaging
-    def pluginExcludes = [
-        "grails-app/views/error.gsp",
-        "FsmSupportDummy.groovy",
-        "FsmMultipleActions.groovy",
-        "Foo.groovy",
-        "Foo2.groovy"
-    ]
+    def pluginExcludes = [ "plugin/test/**" ]
 
     // TODO Fill in these fields
     def title = "Finite State Machine behaviour for domain classes"

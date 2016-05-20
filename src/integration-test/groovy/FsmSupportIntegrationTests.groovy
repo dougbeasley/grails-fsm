@@ -1,3 +1,4 @@
+import plugin.test.*
 
 class FsmSupportIntegrationTests extends GroovyTestCase {
     static transactional = false
@@ -20,9 +21,9 @@ class FsmSupportIntegrationTests extends GroovyTestCase {
         } catch (AssertionError e) {
             assert e.message.contains("Invalid event 'nonevent'")
         }
-        
+
     }
-    
+
     void testComplexFsm() {
         // Take a look at SampleDomainClass to understand what's supposed to happen here
         def samp1 = new FsmSupportDummy()
@@ -68,9 +69,9 @@ class FsmSupportIntegrationTests extends GroovyTestCase {
         testFoo.save()
         assertEquals "(PRE) Debemos estar en estado inicial", "inicial", testFoo.estado
         assertEquals "(PRE) Debemos estar en estado envio envioFinal ", "envioFinal", testFoo.estadoEnvio
-        
+
         testFoo.fire('estado', 'comando')
-        
+
         assertEquals "(POST) Debemos estar en estado final", "final", testFoo.estado
     }
 

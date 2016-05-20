@@ -1,7 +1,9 @@
+package plugin.test
+
 class Foo2 {
     static constraints = {
     }
-    
+
     String estado = 'inicial'
     String estadoEnvio = 'envioInicial'
     static fsm_def = [
@@ -12,7 +14,7 @@ class Foo2 {
                 }
             }
         ],
-        
+
         estadoEnvio : [
             envioInicial : { flow ->
                     flow.on('comandoEnvio') {

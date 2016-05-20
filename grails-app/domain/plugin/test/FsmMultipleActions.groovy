@@ -1,7 +1,9 @@
+package plugin.test
+
 /**
  * Domain class to held some test of the Fsm plugin
  * This testcase adapted from Aleksandar Kochnev's propsed to cover a bug in
- * actions attached to transitions. 
+ * actions attached to transitions.
  */
 class FsmMultipleActions {
 
@@ -13,7 +15,7 @@ class FsmMultipleActions {
     static fsm_def = [
 	    status : [
 	               loaded : { flow ->
-	                   flow.on ('validate') {                    
+	                   flow.on ('validate') {
 	                       from('loaded').when({hasErrors}).to('in_error').act({
 	                    	   setAction(1)
 	                       })
@@ -29,6 +31,6 @@ class FsmMultipleActions {
     }
 
     def FsmMultipleActions() {
-    	
+
     }
 }
