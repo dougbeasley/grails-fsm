@@ -25,8 +25,10 @@ class FsmMultipleActionsTests extends Specification {
     foo.status =='loaded'
 
     when:
-    foo.fire_status('validate')
-
+    FsmMultipleActions.withNewSession {
+      foo.fire_status('validate')
+    }
+    
     then:
     foo.status == 'validated'
     !foo.action1Called

@@ -7,20 +7,12 @@ package plugin.test
  */
 class FsmSupportDummy {
 
-    def name
-    def status = 'initiala'
+    String name
+    String status = 'initiala'
     String mood = 'ToBeOverridenInFsmDef'
-    def cheers
+    String cheers
 
-    def amount  // A number > 0 will allow the status flow to start
-
-    static belongsTo = [
-                        ]
-
-    static constraints = {
-        status()
-        mood()
-    }
+    Integer amount  // A number > 0 will allow the status flow to start
 
     static fsm_def = [
         mood : [

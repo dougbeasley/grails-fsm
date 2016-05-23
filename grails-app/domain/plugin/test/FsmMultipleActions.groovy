@@ -26,11 +26,9 @@ class FsmMultipleActions {
 	               }
 	          ]
     ]
+
     def setAction(n) {
     	this."action${n}Called" = true
     }
 
-    def FsmMultipleActions() {
-
-    }
 }
