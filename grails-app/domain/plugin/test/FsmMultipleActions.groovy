@@ -7,20 +7,20 @@ package plugin.test
  */
 class FsmMultipleActions {
 
-    def status = 'loaded'
-    def hasErrors
-    def action1Called = false
-    def action2Called = false
+    String status = 'loaded'
+    Boolean hasErrors = false
+    Boolean action1Called = false
+    Boolean action2Called = false
 
     static fsm_def = [
 	    status : [
 	               loaded : { flow ->
 	                   flow.on ('validate') {
 	                       from('loaded').when({hasErrors}).to('in_error').act({
-	                    	   setAction(1)
+	                    	   delegate.setAction(1)
 	                       })
 	                       from('loaded').when({!hasErrors}).to('validated').act({
-	                    	   setAction(2)
+							   delegate.setAction(2)
 	                       })
 	                   }
 	               }

@@ -2,6 +2,7 @@ import plugin.test.*
 
 class FsmSupportIntegrationTests extends GroovyTestCase {
     static transactional = false
+
     void testInitialValues() {
         def testa = new FsmSupportDummy()
         assert testa.status == 'initial'
@@ -14,7 +15,7 @@ class FsmSupportIntegrationTests extends GroovyTestCase {
         try {
             samp1.fire('nonflow', 'launch')
         } catch (Exception e) {
-            assert e.message == "Can't fire on flow 'nonflow' which is not defined in 'class FsmSupportDummy'"
+            assert e.message == "Can't fire on flow 'nonflow' which is not defined in 'class plugin.test.FsmSupportDummy'"
         }
         try {
             samp1.fire('mood', 'nonevent')
@@ -29,50 +30,53 @@ class FsmSupportIntegrationTests extends GroovyTestCase {
         def samp1 = new FsmSupportDummy()
 
         //assert !samp1.beenSaved     // Not saved initially
+        FsmSupportDummy.withNewSession {
+            assert 'initial' == samp1.fire('status', 'launch') // Amount == 0 => Won't launch
 
-        assert 'initial' == samp1.fire('status', 'launch') // Amount == 0 => Won't launch
+            //assert samp1.beenSaved  // Status has changed, 'save()' SHOULD have been called
 
-        //assert samp1.beenSaved  // Status has changed, 'save()' SHOULD have been called
-
-        samp1.amount = 3  // Change amount so it will allow starting
+            samp1.amount = 3  // Change amount so it will allow starting
 
             assert 'none' == samp1.fire_mood('up')  // Not running, Mood will not change!!
             assert 'none' == samp1.fire('mood', 'up')  // Not running, Mood will not change!!
             assert 'none' == samp1.fire('mood', 'up')  // Not running, Mood will not change!!
 
-        assert 'running' == samp1.fire('status', 'launch')  // TODO: Delegate method call!!
+            assert 'running' == samp1.fire('status', 'launch')  // TODO: Delegate method call!!
 
             assert 'high' == samp1.fire('mood', 'up')  // status==running, so let's go high!!
 
-        assert 'stopped' == samp1.fire('status', 'stop')
-        assert 'stopped' != samp1.fire('status', 'continue')
-        assert 'running' == samp1.status  // Property delegeated in the domain class!
+            assert 'stopped' == samp1.fire('status', 'stop')
+            assert 'stopped' != samp1.fire('status', 'continue')
+            assert 'running' == samp1.status  // Property delegeated in the domain class!
 
-        assert 'high' == samp1.fire('mood', 'up')
-        assert 'low' == samp1.fire('mood', 'down')
+            assert 'high' == samp1.fire('mood', 'up')
+            assert 'low' == samp1.fire('mood', 'down')
 
-        def samp2 = new FsmSupportDummy()
-        assert 'none' == samp2.fire('mood', 'down')
-        assert 'none' == samp2.fire('mood', 'up')
+            def samp2 = new FsmSupportDummy()
+            assert 'none' == samp2.fire('mood', 'down')
+            assert 'none' == samp2.fire('mood', 'up')
             samp2.amount = 1
             samp2.fire('status', 'launch')
-        assert 'running' == samp2.status
-        assert 'low' == samp2.fire('mood', 'down')
-        assert 'high' == samp2.fire('mood', 'up')
-        assert 'high' == samp2.fire('mood', 'up')
-        assert 'low' == samp2.fire('mood', 'down')
+            assert 'running' == samp2.status
+            assert 'low' == samp2.fire('mood', 'down')
+            assert 'high' == samp2.fire('mood', 'up')
+            assert 'high' == samp2.fire('mood', 'up')
+            assert 'low' == samp2.fire('mood', 'down')
+        }
     }
 
     void testReloadedStates() {
         def testFoo = new Foo2()
-        testFoo.estadoEnvio = 'envioFinal'
-        testFoo.save()
-        assertEquals "(PRE) Debemos estar en estado inicial", "inicial", testFoo.estado
-        assertEquals "(PRE) Debemos estar en estado envio envioFinal ", "envioFinal", testFoo.estadoEnvio
+        FsmSupportDummy.withNewSession {
+            testFoo.estadoEnvio = 'envioFinal'
+            testFoo.save()
+            assertEquals "(PRE) Debemos estar en estado inicial", "inicial", testFoo.estado
+            assertEquals "(PRE) Debemos estar en estado envio envioFinal ", "envioFinal", testFoo.estadoEnvio
 
-        testFoo.fire('estado', 'comando')
+            testFoo.fire('estado', 'comando')
 
-        assertEquals "(POST) Debemos estar en estado final", "final", testFoo.estado
+            assertEquals "(POST) Debemos estar en estado final", "final", testFoo.estado
+        }
     }
 
 }

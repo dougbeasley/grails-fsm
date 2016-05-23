@@ -28,7 +28,7 @@ class FsmMultipleActionsTests extends Specification {
     FsmMultipleActions.withNewSession {
       foo.fire_status('validate')
     }
-    
+
     then:
     foo.status == 'validated'
     !foo.action1Called
@@ -36,21 +36,29 @@ class FsmMultipleActionsTests extends Specification {
 
   }
 
-  void testSecondAction() {
+  def "test second action"() {
+
+    setup:
     def foo = new FsmMultipleActions()
+
+    when:
     foo.hasErrors = true
-    assert !foo.action1Called
-    assert !foo.action2Called
-    assert foo.status == 'loaded'
 
-    foo.fire_status('validate')
-    assert foo.status == 'in_error'
-    assert foo.action1Called
-    assert !foo.action2Called
+    then:
+    !foo.action1Called
+    !foo.action2Called
+    foo.status =='loaded'
+
+    when:
+    FsmMultipleActions.withNewSession {
+      foo.fire_status('validate')
+    }
+
+    then:
+    foo.status == 'in_error'
+    foo.action1Called
+    !foo.action2Called
 
   }
 
-  void testAnyFromTransition() {
-
-  }
 }
